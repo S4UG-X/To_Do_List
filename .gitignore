@@ -1,0 +1,30 @@
+# Backend node modules and env
+/backend/node_modules/
+/backend/.env
+
+# Backend build (if any)
+/backend/dist/
+/backend/build/
+
+# Frontend node modules and env
+/frontend/node_modules/
+/frontend/.env
+
+# Frontend build output
+/frontend/build/
+/frontend/dist/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Coverage
+coverage/
