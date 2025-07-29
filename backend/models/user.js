@@ -1,12 +1,15 @@
 const mongoose = require("mongoose")
-
-const userSchema =  new mongoose.Schema({
+const passportLocalMongoose = require('passport-local-mongoose');
+const userSchema = new mongoose.Schema({
     username: String,
     email: String,
-    passwordHash: String,
-    createdAt: String,
+    createdAt: {
+      type: Date,
+      default: "2025"
+    }
+  });
+  
+  userSchema.plugin(passportLocalMongoose); // adds password hash + salt fields
+  
+  module.exports = mongoose.model("User", userSchema)
 
-})
-const User = mongoose.model("User", userSchema)
-
-module.exports = User
