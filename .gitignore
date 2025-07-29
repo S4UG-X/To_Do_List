@@ -13,7 +13,7 @@
 # Frontend build output
 /frontend/build/
 /frontend/dist/
-
+To_Do_List.code-workspace
 # Logs
 *.log
 logs/
