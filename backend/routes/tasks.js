@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/task.js');
-// const auth = require('../middleware/auth');
+const { isLoggedIn } = require('../middleware/auth');
 
 
 //to add task
-router.post('/', async (req, res) => {
+router.post('/',isLoggedIn, async (req, res) => {
   try {
     const { title, description, dueDate } = req.body;
-    const newTask = new Task({ title, description, dueDate, userId: req.userId });
+    const newTask = new Task({ title, description, dueDate, userId: req.user._id });
     const savedTask = await newTask.save();
     res.status(201).json(savedTask);
   } catch (error) {
@@ -16,11 +16,14 @@ router.post('/', async (req, res) => {
   }
 });
 
+
 //to show the tasks
 
-router.get('/', async (req, res) => {
+router.get('/',isLoggedIn, async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.userId }).sort({ createdAt: -1 });
+    const tasks = await Task.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    console.log(req.user)
+    console.log(req.user)
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -28,12 +31,12 @@ router.get('/', async (req, res) => {
 });
 
 //to edit task
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     let task = await Task.findById(id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
-    if (task.userId.toString() !== req.userId) return res.status(403).json({ message: 'Unauthorized' });
+    if (task.userId.toString() !== req.user._id) return res.status(403).json({ message: 'Unauthorized' });
 
     Object.assign(task, req.body);
     const updatedTask = await task.save();
@@ -44,12 +47,12 @@ router.patch('/:id', async (req, res) => {
 });
 
 //to delete task
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const task = await Task.findById(id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
-    if (task.userId.toString() !== req.userId) return res.status(403).json({ message: 'Unauthorized' });
+    if (task.userId.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
 
     await Task.findByIdAndDelete(id);
     res.json({ message: 'Task deleted' });

@@ -1,35 +1,32 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/user.js');
-const passport = require('passport');
+const User = require("../models/user.js");
+const passport = require("passport");
 
-
- 
-
-
-
-router.post('/signup', async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
   const user = new User({ username: req.body.username, email: req.body.email });
   await User.register(user, req.body.password); // hashes & saves user
 
   req.login(user, (err) => {
     if (err) return next(err);
-    return res.redirect('/');
+    return res.redirect("/");
   });
 });
 
-
 router.post(
   "/login",
-  passport.authenticate("local", { 
-    failureRedirect: "/login",
-    failureFlash: true,
+  passport.authenticate("local", {
+    failureRedirect: false,
+    // failureFlash: true,
   }),
   (req, res) => {
-    console.log("Log in Successfully")
-    res.redirect("/")
+    console.log("Log in Successfully");
+    res.redirect("/");
   }
 );
-
+router.get("/logout", (req, res) => {
+  req.logout(function (err) {});
+  res.redirect("/");
+});
 
 module.exports = router;

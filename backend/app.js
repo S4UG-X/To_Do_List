@@ -4,8 +4,6 @@ const app= express()
 const mongoose = require('mongoose');
 const User = require("./models/user.js")
 const Task = require("./models/task.js")
-// const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
 const passport = require("passport")
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
@@ -17,7 +15,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
-
+const flash = require('connect-flash');
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
 

@@ -16,5 +16,5 @@ Think about performance and security now, not later.
 
 
 
+//error handeling and validation
 
-//when you add the task, make sure the you save the user id properly.
