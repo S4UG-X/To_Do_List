@@ -3,7 +3,7 @@ const express = require("express")
 const app= express()
 const mongoose = require('mongoose');
 const User = require("./models/user.js")
-const Task = require("./models/task.js")
+
 const passport = require("passport")
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;

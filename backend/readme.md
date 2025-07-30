@@ -16,5 +16,7 @@ Think about performance and security now, not later.
 
 
 
+//do this: when the user is deleted, the tasks that the user created should also be deleted.
+//Data validation;
 //error handeling and validation
 

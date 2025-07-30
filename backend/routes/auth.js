@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user.js");
 const passport = require("passport");
+const {validateUser} = require("../validation.js")
 
-router.post("/signup", async (req, res, next) => {
+router.post("/signup",validateUser, async (req, res, next) => {
   const user = new User({ username: req.body.username, email: req.body.email });
   await User.register(user, req.body.password); // hashes & saves user
 
@@ -14,7 +15,7 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post(
-  "/login",
+  "/login",validateUser,
   passport.authenticate("local", {
     failureRedirect: false,
     // failureFlash: true,
@@ -24,7 +25,7 @@ router.post(
     res.redirect("/");
   }
 );
-router.get("/logout", (req, res) => {
+router.get("/logout",validateUser,(req, res) => {
   req.logout(function (err) {});
   res.redirect("/");
 });

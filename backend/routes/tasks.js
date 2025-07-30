@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/task.js');
 const { isLoggedIn } = require('../middleware/auth');
-
+const {validateTask} = require("../validation.js")
 
 //to add task
-router.post('/',isLoggedIn, async (req, res) => {
+router.post('/',isLoggedIn,validateTask, async (req, res) => {
   try {
     const { title, description, dueDate } = req.body;
     const newTask = new Task({ title, description, dueDate, userId: req.user._id });
@@ -19,7 +19,7 @@ router.post('/',isLoggedIn, async (req, res) => {
 
 //to show the tasks
 
-router.get('/',isLoggedIn, async (req, res) => {
+router.get('/',isLoggedIn,validateTask, async (req, res) => {
   try {
     const tasks = await Task.find({ userId: req.user._id }).sort({ createdAt: -1 });
     console.log(req.user)
@@ -31,7 +31,7 @@ router.get('/',isLoggedIn, async (req, res) => {
 });
 
 //to edit task
-router.patch('/:id',isLoggedIn, async (req, res) => {
+router.patch('/:id',isLoggedIn,validateTask, async (req, res) => {
   try {
     const { id } = req.params;
     let task = await Task.findById(id);
@@ -47,7 +47,7 @@ router.patch('/:id',isLoggedIn, async (req, res) => {
 });
 
 //to delete task
-router.delete('/:id',isLoggedIn, async (req, res) => {
+router.delete('/:id',isLoggedIn,validateTask, async (req, res) => {
   try {
     const { id } = req.params;
     const task = await Task.findById(id);
