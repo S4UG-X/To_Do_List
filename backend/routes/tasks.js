@@ -1,64 +1,64 @@
 const express = require('express');
+const mongoose = require("mongoose")
 const router = express.Router();
 const Task = require('../models/task.js');
 const { isLoggedIn } = require('../middleware/auth');
 const {validateTask} = require("../validation.js")
+const asyncWrap = require("../middleware/asyncWrap.js")
 
 //to add task
-router.post('/',isLoggedIn,validateTask, async (req, res) => {
-  try {
+router.post('/',isLoggedIn,validateTask, asyncWrap(async (req, res) => {
+
     const { title, description, dueDate } = req.body;
     const newTask = new Task({ title, description, dueDate, userId: req.user._id });
     const savedTask = await newTask.save();
     res.status(201).json(savedTask);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+ 
+}));
 
 
 //to show the tasks
 
-router.get('/',isLoggedIn,validateTask, async (req, res) => {
-  try {
+router.get('/',isLoggedIn, asyncWrap(async (req, res) => {
+
+  // console.log(typeof req.user._id, req.user._id)
     const tasks = await Task.find({ userId: req.user._id }).sort({ createdAt: -1 });
-    console.log(req.user)
-    console.log(req.user)
     res.json(tasks);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+ 
+}));
 
 //to edit task
-router.patch('/:id',isLoggedIn,validateTask, async (req, res) => {
-  try {
+router.patch('/:id',isLoggedIn,validateTask, asyncWrap(async (req, res) => {
+  
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid task ID' });
+    }
     let task = await Task.findById(id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
-    if (task.userId.toString() !== req.user._id) return res.status(403).json({ message: 'Unauthorized' });
+    if (task.userId.toString() !== req.user._id.toString()) return res.status(403).json({ message: 'Unauthorized' });
 
     Object.assign(task, req.body);
     const updatedTask = await task.save();
     res.json(updatedTask);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+ 
+}));
 
 //to delete task
-router.delete('/:id',isLoggedIn,validateTask, async (req, res) => {
-  try {
+router.delete('/:id',isLoggedIn, asyncWrap(async (req, res) => {
+ 
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid task ID' });
+    }
+
     const task = await Task.findById(id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
-    if (task.userId.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
+    if (task.userId.toString() !== req.user._id.toString()) return res.status(403).json({ message: 'Unauthorized' });
 
     await Task.findByIdAndDelete(id);
     res.json({ message: 'Task deleted' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+ 
+}));
 
 module.exports = router;

@@ -1,8 +1,8 @@
 module.exports.isLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        console.log("User in not logged in")
-        return res.send("Not Authorized");  
-    } else {
-        next();
-    }
- }
+  if (!req.isAuthenticated()) {
+    const err = new Error("Not Authorized");
+    err.status = 401;
+    return next(err);
+  }
+  next();
+};
