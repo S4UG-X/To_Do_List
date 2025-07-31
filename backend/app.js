@@ -10,9 +10,23 @@ const LocalStrategy = require("passport-local").Strategy;
 
 app.use(express.json());
 
+
+const cors = require('cors');
+
+
+
+app.use(cors({
+  origin: 'http://localhost:5173', // frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
+
+
+
 app.use(
   session({
-    secret: "yoursecret",
+secret: process.env.SESSION_SECRET || 'yoursecret',
     resave: false,
     saveUninitialized: false,
   })

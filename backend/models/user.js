@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     createdAt: {
       type: Date,
-      default: "2025"
+      default: Date.now
     }
   });
   

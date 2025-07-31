@@ -4,12 +4,13 @@ const taskSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        default: "68881b69b53d3c921c78e85f",
+        // default: "68881b69b53d3c921c78e85f",
         required: true
       },
       title: {
         type: String,
         required: [true, 'Task title is required'],
+      
         trim: true
       },
       description: {

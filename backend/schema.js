@@ -2,7 +2,7 @@ const Joi = require("joi");
 module.exports.taskSchema = Joi.object({
   userId: Joi.string(),
   title: Joi.string().required(),
-  description: Joi.string().required(),
+  description: Joi.string(),
   completed: Joi.boolean(),
   dueDate: Joi.date(),
   createdAt: Joi.date(),
