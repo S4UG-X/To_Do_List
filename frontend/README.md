@@ -8,3 +8,13 @@ lifting state up
 
 Now you have to make isloggedin state a global variable.
 then you will use useEffect when you haveto fetch the data. you dont need useEffect in Login.jsx. as you will show the tasks from other component.
+
+
+
+
+
+//left things to do:
+1. in the navbar, in large screen, the Home and AddTask button are seperated far. So fix that. 
+2. Add Pricing and Blog to your page.
+3. for small screen, make the footer content in the middle not on the left.
+4. integrate the login with google.

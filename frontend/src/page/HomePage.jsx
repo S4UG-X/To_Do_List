@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import BodyContent from '../components/BodyContent'
 
 const HomePage = () => {
   return (
@@ -10,7 +11,8 @@ const HomePage = () => {
  
   <Navbar/>
   <div className="flex-1 p-4">
-    <p>body content</p>
+
+    <BodyContent/>
   </div>
 
   <Footer/>
