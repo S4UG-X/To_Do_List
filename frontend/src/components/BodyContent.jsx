@@ -1,6 +1,8 @@
 import React from 'react'
 import TodoDemo from './BodyContent/ToDoDemo'
 import HeroSection from './BodyContent/HeroSection'
+import SignupPopup from './SignupPopup'
+import LoginPopup from './LoginPopup'
 
 const BodyContent = () => {
   return (
@@ -20,16 +22,19 @@ const BodyContent = () => {
               Try it for Free
             </button>
         </div>
+        <br />
 
         
         <TodoDemo/>
         <HeroSection/>
 
 
-<hr />
-        heading 
-        try tracker free button
-        Features of your app
+        <SignupPopup/>
+        <LoginPopup/>
+
+
+
+       
        </div>
 
 
