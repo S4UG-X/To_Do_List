@@ -3,6 +3,8 @@ import LoginPopup from "./components/LoginPopup";
 import { AuthProvider } from "./Context/AuthContext";
 import HomePage from "./page/HomePage";
 
+import Dash from "./components/DashBoard/Dash";
+
 function App() {
   return (
 <AuthProvider>  
@@ -10,7 +12,8 @@ function App() {
     
       {/* <Login /> */}
       {/* <LoginPopup/> */}
-      <HomePage/>
+      {/* <HomePage/> */}
+    <Dash/>
     
 </AuthProvider>
   );
