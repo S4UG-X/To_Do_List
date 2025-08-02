@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import LoginPopup from "./LoginPopup";
 import SignupPopup from "./SignupPopup";
+import { AuthContext } from "../Context/AuthContext";
 
 const Navbar = () => {
   const [currState, setCurrState] = useState(null);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext); 
   return (
     <>
       <div className="bg-red-400 flex justify-between p-3 px-6 items-center shadow-md ">
@@ -23,24 +25,31 @@ const Navbar = () => {
         </div>
 
         {/* Right side */}
-        <div className="text-white font-medium">
-          <span
-            onClick={() => setCurrState("login")}
-            className=" hover:text-stone-200 cursor-pointer"
-          >
-            {" "}
-            Login
-          </span>{" "}
-          /
-          <span
-            onClick={() => setCurrState("signup")}
-            className=" hover:text-stone-200 cursor-pointer"
-          >
-            {" "}
-            Signup{" "}
-          </span>
-        </div>
+
+        {!isLoggedIn &&<div className="text-white font-medium">
+<span
+  onClick={() => setCurrState("login")}
+  className=" hover:text-stone-200 cursor-pointer"
+>
+  {" "}
+  Login
+</span>{" "}
+/
+<span
+  onClick={() => setCurrState("signup")}
+  className=" hover:text-stone-200 cursor-pointer"
+>
+  {" "}
+  Signup{" "}
+</span>
+</div> }
+{ isLoggedIn && <p>username</p> }
      
+
+
+        
+      
+       
        
       </div>
       {currState === "login" &&   <LoginPopup setCurrState={setCurrState}/>}

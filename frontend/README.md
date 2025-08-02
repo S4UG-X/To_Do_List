@@ -11,6 +11,7 @@ then you will use useEffect when you haveto fetch the data. you dont need useEff
 
 Next: put the logic in the Login, and when a user logs in you redirect to the dashboard ( which i havenot built. so Buit the dashboard first)
 
+ when the user logs in. then the body content will be changed to dashboard content where user can manipulate the data. and the data will be saved to the backend.
 
 
 

@@ -12,8 +12,8 @@ function App() {
     
       {/* <Login /> */}
       {/* <LoginPopup/> */}
-      {/* <HomePage/> */}
-    <Dash/>
+      <HomePage/>
+    {/* <Dash/> */}
     
 </AuthProvider>
   );
