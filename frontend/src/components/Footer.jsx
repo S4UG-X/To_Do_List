@@ -43,7 +43,7 @@ const Footer = () => {
         <div className="text-gray-100">
           <h2 className=" text-2xl font-semibold mb-3">Contact Us</h2>
           <p> +1 (601)522-7345</p>
-          <p>saugatlamichhane@gmail.com</p>
+          <p>Tracker@tracker.com</p>
         </div>
       </div>
     </div>

@@ -1,10 +1,11 @@
-import React from 'react'
-import TodoDemo from './BodyContent/ToDoDemo'
-import HeroSection from './BodyContent/HeroSection'
-import SignupPopup from './SignupPopup'
-import LoginPopup from './LoginPopup'
+import React, { useState } from 'react'
+import TodoDemo from './ToDoDemo'
+import HeroSection from './HeroSection'
+import SignupPopup from '../SignupPopup'
+import LoginPopup from '../LoginPopup'
 
 const BodyContent = () => {
+  const [currState, setCurrState] = useState(null)
   return (
     <div className='text-center'>
         
@@ -18,19 +19,18 @@ const BodyContent = () => {
         </div>
 
         <div>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
+            <button onClick={()=>setCurrState("signup")} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
               Try it for Free
             </button>
         </div>
         <br />
-
+        {currState==="signup" && <SignupPopup setCurrState={setCurrState}/>}
+        {currState === "login" && <LoginPopup setCurrState={setCurrState} />}
         
         <TodoDemo/>
         <HeroSection/>
 
 
-        <SignupPopup/>
-        <LoginPopup/>
 
 
 

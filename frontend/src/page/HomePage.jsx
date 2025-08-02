@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import BodyContent from '../components/BodyContent'
+import BodyContent from '../components/BodyContent/BodyContent'
 
 const HomePage = () => {
   return (

@@ -9,6 +9,8 @@ lifting state up
 Now you have to make isloggedin state a global variable.
 then you will use useEffect when you haveto fetch the data. you dont need useEffect in Login.jsx. as you will show the tasks from other component.
 
+Next: put the logic in the Login, and when a user logs in you redirect to the dashboard ( which i havenot built. so Buit the dashboard first)
+
 
 
 
