@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 const SignupPopup = ({ setCurrState }) => {
   let [form, setForm] = useState({
@@ -6,6 +7,7 @@ const SignupPopup = ({ setCurrState }) => {
     email: "",
     password: "",
   });
+  const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
 
   const handleForm = (event) => {
     setForm((currData) => {
@@ -13,8 +15,36 @@ const SignupPopup = ({ setCurrState }) => {
     });
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+    try {
+      
+    
+    const res = await fetch("http://localhost:8080/api/signup", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        username: form.username, 
+        email: form.email, 
+        password: form.password 
+      }),
+    });
+      if (res.ok) {
+
+        
+        console.log("Login successful");
+        setIsLoggedIn(true)
+        setCurrState(null); // Close the popup on successful login
+      } else {
+        console.log("Signup failed");
+      }
+  
+   
+  } catch(error){
+    console.error("Signup Error:", error)
+  }
+    
     setForm({
       username: "",
       email: "",
