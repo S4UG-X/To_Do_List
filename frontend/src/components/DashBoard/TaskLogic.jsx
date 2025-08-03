@@ -7,11 +7,36 @@ export default function TaskLogic (){
     let [newValue, setNewValue] = useState("")
     let {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
 
-    const AddFunct = ()=>{
-    
-        setTasks([...Tasks, {name:newValue, id:uuidv4(), isDone:false}])
-        setNewValue("")
-    }
+    const AddTask = async () => {
+        try {
+          const res = await fetch("http://localhost:8080/api/tasks", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              title: newValue,
+              description: "No Description",
+              dueDate: "2025",
+            }),
+          });
+      
+          if (!res.ok) throw new Error("Failed to add task");
+      
+          const savedTask = await res.json(); //we call the backend again
+      
+          setTasks([
+            ...Tasks,
+            { name: savedTask.title, id: savedTask._id, isDone: savedTask.completed },
+          ]);
+      
+          setNewValue("");
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      
     const updateValue = (event)=>{
         setNewValue(event.target.value)
     }
@@ -66,7 +91,7 @@ export default function TaskLogic (){
             className="flex-1 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <button 
-            onClick={AddFunct}
+            onClick={AddTask}
             className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
           >
             Add
