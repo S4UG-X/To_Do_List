@@ -1,20 +1,20 @@
 import { useContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AuthContext } from "../../Context/AuthContext";
+
 export default function TaskLogic() {
   let [Tasks, setTasks] = useState([
     { name: "sampletask", id: uuidv4(), isDone: false },
   ]);
   let [newValue, setNewValue] = useState("");
-  let { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  let [editingId, setEditingId] = useState(null);
+  let { isLoggedIn } = useContext(AuthContext);
 
   const AddTask = async () => {
     try {
       const res = await fetch("http://localhost:8080/api/tasks", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           title: newValue,
@@ -25,7 +25,7 @@ export default function TaskLogic() {
 
       if (!res.ok) throw new Error("Failed to add task");
 
-      const savedTask = await res.json(); //we call the backend again
+      const savedTask = await res.json();
 
       setTasks([
         ...Tasks,
@@ -35,7 +35,6 @@ export default function TaskLogic() {
           isDone: savedTask.completed,
         },
       ]);
-
       setNewValue("");
     } catch (err) {
       console.error(err);
@@ -45,21 +44,18 @@ export default function TaskLogic() {
   const updateValue = (event) => {
     setNewValue(event.target.value);
   };
-  Tasks.push();
+
   const markOne = async (id) => {
     try {
       const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ completed: true }), // only sending the completed field
+        body: JSON.stringify({ completed: true }),
       });
 
       if (!res.ok) throw new Error("Failed to update task");
 
-      // Update frontend state after success
       setTasks((preTask) =>
         preTask.map((task) =>
           task.id === id ? { ...task, isDone: true } : task
@@ -69,6 +65,7 @@ export default function TaskLogic() {
       console.error(err);
     }
   };
+
   const deleteList = async (id) => {
     try {
       const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
@@ -78,7 +75,6 @@ export default function TaskLogic() {
 
       if (!res.ok) throw new Error("Failed to delete task");
 
-      // Update state only after successful deletion
       setTasks((preTask) => preTask.filter((task) => task.id !== id));
     } catch (err) {
       console.error(err);
@@ -86,12 +82,42 @@ export default function TaskLogic() {
   };
 
   const taskEdit = (key) => {
-    // Find the task to edit
     const taskToEdit = Tasks.find((task) => task.id === key);
     if (taskToEdit) {
       setNewValue(taskToEdit.name);
-      // Remove the task from the list temporarily
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== key));
+      setEditingId(key);
+    }
+  };
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/tasks/${editingId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ title: newValue }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update title");
+
+      const updatedTask = await res.json();
+
+      setTasks((prev) => [
+        ...prev,
+        {
+          name: updatedTask.title,
+          id: updatedTask._id,
+          isDone: updatedTask.completed,
+        },
+      ]);
+
+      setEditingId(null);
+      setNewValue("");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -101,9 +127,9 @@ export default function TaskLogic() {
         .then((res) => res.json())
         .then((data) => {
           const formatted = data.map((task) => ({
-            name: task.title, // take title as name
-            id: task._id || uuidv4(), // use _id or generate uuid
-            isDone: task.completed, // use completed as isDone
+            name: task.title,
+            id: task._id || uuidv4(),
+            isDone: task.completed,
           }));
           setTasks(formatted);
         })
@@ -122,12 +148,21 @@ export default function TaskLogic() {
           onChange={updateValue}
           className="flex-1 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <button
-          onClick={AddTask}
-          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-        >
-          Add
-        </button>
+        {editingId ? (
+          <button
+            onClick={saveEdit}
+            className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+          >
+            Save
+          </button>
+        ) : (
+          <button
+            onClick={AddTask}
+            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          >
+            Add
+          </button>
+        )}
       </div>
 
       <div className="showing">
