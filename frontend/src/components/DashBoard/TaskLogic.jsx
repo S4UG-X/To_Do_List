@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { AuthContext } from "../../Context/AuthContext";
 export default function TaskLogic (){
 
     let [Tasks, setTasks] = useState([ {name: "sampletask",id: uuidv4()    , isDone : false}])
     let [newValue, setNewValue] = useState("")
+    let {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
 
     const AddFunct = ()=>{
     
@@ -35,6 +37,22 @@ export default function TaskLogic (){
           setTasks((prevTasks) => prevTasks.filter((task) => task.id !== key));
         }
       }
+
+      useEffect(() => {
+        if (isLoggedIn) {
+          fetch("http://localhost:8080/api/tasks", { credentials: "include" })
+            .then((res) => res.json())
+            .then((data) => {
+              const formatted = data.map((task) => ({
+                name: task.title,        // take title as name
+                id: task._id || uuidv4(), // use _id or generate uuid
+                isDone: task.completed    // use completed as isDone
+              }));
+              setTasks(formatted);
+            })
+            .catch((err) => console.error(err));
+        }
+      }, [isLoggedIn]);
 
     return (
         <div className="w-96 mx-auto mt-5 p-5 bg-gray-100 rounded-lg shadow-md">
