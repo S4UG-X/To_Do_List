@@ -42,7 +42,7 @@ router.get(
 router.patch(
   "/:id",
   isLoggedIn,
-  validateTask,
+  
   asyncWrap(async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
